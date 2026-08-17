@@ -33,38 +33,6 @@
             background-size: 100% 4px, 3px 100%;
         }
 
-        #clock {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(0, 173, 181, 0.5);
-        }
-
-        .search-box {
-            margin-bottom: 2.5rem;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-            outline: none;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
-
-        .search-box input:focus {
-            border-color: var(--accent-color);
-        }
-
         .grid-links {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -208,16 +176,6 @@
 </head>
 <body>
 
-    <!-- Reloj -->
-    <div id="clock">00:00:00</div>
-
-    <!-- Buscador -->
-    <div class="search-box">
-        <form action="https://google.com" method="get">
-            <input type="text" name="q" placeholder="Buscar en Google..." autocomplete="off">
-        </form>
-    </div>
-
     <!-- Enlaces directos -->
     <div class="grid-links">
         <a href="https://github.com" class="card">
@@ -276,6 +234,8 @@
             <img src="bloody Killers.jpg" alt="Character">
         </div>
 
+        
+
      <!-- Audio vinculado al archivo exacto de tu lista -->
     <audio id="bg-music" loop src="Hermes.ogg.mp3"></audio>
 
@@ -286,15 +246,6 @@
     </div>
 
     <script>
-        // Reloj en tiempo real
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
-            document.getElementById('clock').textContent = timeString;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
         // Control de reproducción e interacciones de audio
         const music = document.getElementById('bg-music');
         const muteBtn = document.getElementById('mute-btn');
