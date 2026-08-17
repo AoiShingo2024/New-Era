@@ -277,17 +277,17 @@
         </div>
     </div>
 
-    <!-- Pista de audio de prueba Lo-Fi instrumental -->
-        <audio id="bg-music" loop src="Hermes.ogg.mp3"></audio>
+     <!-- Audio vinculado al archivo exacto de tu lista -->
+    <audio id="bg-music" loop src="Hermes.ogg.mp3"></audio>
 
     <!-- Barra de control inferior -->
     <div class="audio-controls">
-        <span>🎵 BGM</span>
+        <span id="music-status">🎵 Haz clic en cualquier lugar para activar la música</span>
         <button id="mute-btn">Pausar</button>
     </div>
 
     <script>
-        // Reloj
+        // Reloj en tiempo real
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
@@ -296,19 +296,45 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // Control de reproducción e interacciones
+        // Control de reproducción e interacciones de audio
         const music = document.getElementById('bg-music');
         const muteBtn = document.getElementById('mute-btn');
+        const musicStatus = document.getElementById('music-status');
         let hasPlayed = false;
 
-        music.volume = 0.25; // Volumen moderado
+        music.volume = 0.30; // Volumen al 30%
 
-        // Iniciar audio automáticamente tras la primera interacción en la pantalla
-        document.body.addEventListener('click', () => {
+        function iniciarMusica() {
             if (!hasPlayed) {
-                music.play().catch(err => console.log("Audio en espera de interacción directa:", err));
-                hasPlayed = true;
+                music.play()
+                    .then(() => {
+                        hasPlayed = true;
+                        muteBtn.textContent = "Pausar";
+                        musicStatus.textContent = "🎵 Reproduciendo: Hermes";
+                    })
+                    .catch(err => {
+                        console.log("Esperando clic del usuario para reproducir audio.", err);
+                    });
+            }
+        }
+
+        // Se activa en cuanto el usuario toca cualquier parte del fondo o los menús
+        document.body.addEventListener('click', iniciarMusica);
+
+        // Botón manual para pausar o reanudar
+        muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita interferencias con el clic del body
+            if (music.paused) {
+                music.play();
+                muteBtn.textContent = "Pausar";
+                musicStatus.textContent = "🎵 Reproduciendo: Hermes";
+            } else {
+                music.pause();
+                muteBtn.textContent = "Reproducir";
+                musicStatus.textContent = "🎵 Música en pausa";
             }
         });
+    </script>
+</body>
+</html>
 
-        // Botón manual de pausa
