@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Homepage</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #00adb5;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        #clock {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+        }
+        .search-box {
+            margin-bottom: 3rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            outline: none;
+        }
+        .grid-links {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--accent-color);
+        }
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Reloj en tiempo real -->
+    <div id="clock">00:00:00</div>
+
+    <!-- Barra de búsqueda de Google -->
+    <div class="search-box">
+        <form action="https://google.com" method="get">
+            <input type="text" name="q" placeholder="Buscar en Google..." autocomplete="off">
+        </form>
+    </div>
+
+    <!-- Panel de accesos directos -->
+    <div class="grid-links">
+        <a href="https://github.com" class="card">
+            <div class="card-icon">🐙</div>
+            <div>GitHub</div>
+        </a>
+        <a href="https://youtube.com" class="card">
+            <div class="card-icon">📺</div>
+            <div>YouTube</div>
+        </a>
+        <a href="https://reddit.com" class="card">
+            <div class="card-icon">🤖</div>
+            <div>Reddit</div>
+        </a>
+        <a href="https://chatgpt.com" class="card">
+            <div class="card-icon">🧠</div>
+            <div>ChatGPT</div>
+        </a>
+    </div>
+
+    <script>
+        // Lógica para mantener el reloj actualizado
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
