@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Homepage</title>
+    <title>Mi Dashboard Gamer</title>
     <style>
         :root {
-            --bg-color: #121212;
+            --bg-color: #030a13;
             --card-bg: #1e1e1e;
+            --grid-bg: rgba(6, 21, 38, 0.5);
+            --border-color: #163654;
             --text-color: #ffffff;
             --accent-color: #00adb5;
         }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -18,72 +21,204 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            cursor: pointer; /* Feedback para el usuario (clic para activar audio) */
+            
+            /* Líneas de escaneo retro globales en el fondo */
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                              linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+            background-size: 100% 4px, 3px 100%;
         }
+
         #clock {
             font-size: 3.5rem;
             font-weight: bold;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(0, 173, 181, 0.5);
         }
+
         .search-box {
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             width: 100%;
             max-width: 500px;
         }
+
         .search-box input {
             width: 100%;
             padding: 12px 20px;
             font-size: 1rem;
-            border: none;
+            border: 1px solid var(--border-color);
             border-radius: 25px;
             background-color: var(--card-bg);
             color: var(--text-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
             outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
         }
+
+        .search-box input:focus {
+            border-color: var(--accent-color);
+        }
+
         .grid-links {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             max-width: 600px;
             width: 100%;
+            margin-bottom: 3.5rem;
         }
+
         .card {
             background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 12px;
             text-align: center;
             text-decoration: none;
             color: var(--text-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
+
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 12px rgba(0, 173, 181, 0.4);
         }
+
         .card-icon {
             font-size: 1.5rem;
             margin-bottom: 8px;
+        }
+
+        /* --- SECCIÓN CHARACTER SELECT --- */
+        .section-title {
+            text-align: center;
+            letter-spacing: 4px;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .char-card {
+            background-color: var(--grid-bg);
+            border: 1px solid var(--border-color);
+            aspect-ratio: 2 / 3;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Líneas de escaneo CRT locales por tarjeta */
+        .char-card::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+            background-size: 100% 3px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .char-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .char-card.empty {
+            background: rgba(3, 10, 19, 0.7);
+        }
+
+        .char-card.active {
+            border-color: var(--accent-color);
+            box-shadow: inset 0 0 12px rgba(0, 173, 181, 0.5);
+        }
+
+        .char-card:not(.empty):hover {
+            border-color: var(--accent-color);
+            box-shadow: inset 0 0 20px rgba(0, 173, 181, 0.5), 0 0 15px rgba(0, 173, 181, 0.3);
+            transform: scale(1.04);
+        }
+
+        .char-card:not(.empty):hover img {
+            transform: scale(1.08);
+        }
+
+        /* --- CONTROLES DE AUDIO --- */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            z-index: 10;
+        }
+
+        .audio-controls button {
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .grid-links { grid-template-columns: repeat(2, 1fr); }
+            .character-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .character-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Reloj en tiempo real -->
+    <!-- Reloj -->
     <div id="clock">00:00:00</div>
 
-    <!-- Barra de búsqueda de Google -->
+    <!-- Buscador -->
     <div class="search-box">
         <form action="https://google.com" method="get">
             <input type="text" name="q" placeholder="Buscar en Google..." autocomplete="off">
         </form>
     </div>
 
-    <!-- Panel de accesos directos -->
+    <!-- Enlaces directos -->
     <div class="grid-links">
         <a href="https://github.com" class="card">
             <div class="card-icon">🐙</div>
@@ -103,8 +238,53 @@
         </a>
     </div>
 
+    <!-- Título de Selección -->
+    <div class="section-title">CHARACTER SELECT</div>
+
+    <!-- Cuadrícula de Personajes -->
+    <div class="character-grid">
+        <div class="char-card active"></div>
+        <div class="char-card empty"></div>
+        
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+
+        <!-- Fila Inferior -->
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+        <div class="char-card empty"></div>
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+        <div class="char-card empty"></div>
+        <div class="char-card empty"></div>
+        <div class="char-card">
+            <img src="https://placeholder.com" alt="Character">
+        </div>
+    </div>
+
+    <!-- Pista de audio de prueba Lo-Fi instrumental -->
+    <audio id="bg-music" loop src="https://soundhelix.com"></audio>
+
+    <!-- Barra de control inferior -->
+    <div class="audio-controls">
+        <span>🎵 BGM</span>
+        <button id="mute-btn">Pausar</button>
+    </div>
+
     <script>
-        // Lógica para mantener el reloj actualizado
+        // Reloj
         function updateClock() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
@@ -112,6 +292,20 @@
         }
         setInterval(updateClock, 1000);
         updateClock();
-    </script>
-</body>
-</html>
+
+        // Control de reproducción e interacciones
+        const music = document.getElementById('bg-music');
+        const muteBtn = document.getElementById('mute-btn');
+        let hasPlayed = false;
+
+        music.volume = 0.25; // Volumen moderado
+
+        // Iniciar audio automáticamente tras la primera interacción en la pantalla
+        document.body.addEventListener('click', () => {
+            if (!hasPlayed) {
+                music.play().catch(err => console.log("Audio en espera de interacción directa:", err));
+                hasPlayed = true;
+            }
+        });
+
+        // Botón manual de pausa
